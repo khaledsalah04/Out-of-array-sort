@@ -1,0 +1,155 @@
+#include <iostream> 
+#include <string>
+#include <math.h>
+using namespace std;
+
+
+class dynamicfloats
+{
+	int s;
+	float *p;
+public:
+
+	dynamicfloats()
+	{
+		s = 0;
+		p = NULL;
+	}
+
+
+
+
+	void setelement(int index, float value)
+	{
+		p[index] = value;
+	}
+
+	void print()
+	{
+		for (int i = 0;i < s;i++)
+		{
+			cout << p[i] << endl;
+		}
+	}
+
+	void setsize(int news)
+	{
+		if (s == 0)
+		{
+			s = news;
+			p = new float[s];
+		}
+		else
+		{
+			int m = s;
+			if (news < s)
+				m = news;
+			float *t = new float[news];
+
+			for (int i = 0;i < m;i++)
+			{
+				t[i] = p[i];
+			}
+			delete[]p;
+			p = t;
+		}
+	}
+
+	int getsize()
+	{
+		return s;
+	}
+
+	void add(float value)
+	{
+		setsize(s + 1);
+		p[s - 1] = value;
+
+	}
+
+	float sum()
+	{
+		float sum = 0;
+		for (int i = 0;i < s;i++)
+		{
+			sum += p[i];
+		}
+		return sum;
+	}
+
+
+	void remove(int index)
+	{
+		for (int i = index;i<s - 1;i++)
+		{
+			p[i] = p[i + 1];
+		}
+		s--;
+	}
+
+	int find(float value)
+	{
+		for (int i = 0;i < s;i++)
+		{
+			if (p[i] == value)
+				return i;
+		}
+	}
+
+
+	dynamicfloats OutOfArraySort()
+	{
+		
+		dynamicfloats b;
+		b.setsize(s);
+		int length = s;
+		int iterations = length - 1;
+		float min;
+		int index;
+		for (int i = 0;i < length;i++)
+		{
+			min = p[0];
+			for (int j = 0;j < iterations;j++)
+			{
+				if (p[j + 1] < min)
+				{
+					min = p[j + 1];
+				}
+			}
+			iterations--;
+			index = find(min);
+			b.setelement(i, min);
+			remove(index);
+		}
+		return b;
+	}
+
+
+};
+
+
+void main()
+{
+	dynamicfloats a,d;
+	a.setsize(6);
+	d.setsize(6);
+	a.setelement(0, 3);
+	a.setelement(1, 1);
+	a.setelement(2, 2);
+	a.setelement(3, 45);
+	a.setelement(4, 2);
+	a.setelement(5, 2);
+	//a.remove(1);
+	d=a.OutOfArraySort();
+	d.print();
+
+	
+
+	//cout << a.find(3) << endl;
+
+
+
+
+
+	system("pause");
+}
